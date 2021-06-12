@@ -1,0 +1,711 @@
+{% extends 'dashboard/base.html' %}
+{% block page_content %}
+    <div id="index-page">
+            <div class="fdc row custom_row">
+                <div class="step-1" v-if="input_show" style="padding-left: 20px; padding-right: 20px;">
+                    <div v-bind:class="[is_dark_mode ? 'dark-api-data' : 'white-api-data']">
+                        <div style="width: 100%;">
+                            <div class="row custom_row" style="margin-left: 20px !important; margin-bottom: 7px !important;">
+                                <div v-bind:class="[dest_cur == 'XMR' || source_cur == 'XMR' ? 'active-class' : 'inactive-class']">
+                                    <a @click.prevent="select_currency(1)">
+                                        <div v-if="dest_cur == 'XMR' || source_cur == 'XMR'">
+                                            <img v-bind:class="[is_dark_mode ? 'dark-face' : 'white-face']" src="/static/img/xmr_active.png" alt="XMR" width="30" height="30" />
+                                        </div>
+                                        <div v-else class="custom-tooltip">
+                                            <img v-bind:class="[is_dark_mode ? 'dark-face' : 'white-face']"
+                                                src="/static/img/xmr_inactive.png"
+                                                alt="XMR"
+                                                width="30"
+                                                height="30"
+                                                onmouseover="this.src='/static/img/xmr_active.png'"
+                                                onmouseout="this.src='/static/img/xmr_inactive.png'"
+                                            />
+                                            <span v-bind:class="[is_dark_mode ? 'dark-tooltiptext' : 'white-tooltiptext']" id="xmr_tool_tip">Monero</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="row custom_row">
+                                <div v-bind:class="[dest_cur == 'XVG' || source_cur == 'XVG' ? 'active-class' : 'inactive-class']" style="margin-right: 10px;">
+                                    <a @click.prevent="select_currency(6)">
+                                        <div v-if="dest_cur == 'XVG' || source_cur == 'XVG'">
+                                            <img v-bind:class="[is_dark_mode ? 'dark-face' : 'white-face']" src="/static/img/verge_active.png" alt="XVG" width="30" height="30" />
+                                        </div>
+                                        <div v-else class="custom-tooltip">
+                                            <img v-bind:class="[is_dark_mode ? 'dark-face' : 'white-face']"
+                                                src="/static/img/verge_inactive.png"
+                                                alt="ETH"
+                                                width="30"
+                                                height="30"
+                                                onmouseover="this.src='/static/img/verge_active.png'"
+                                                onmouseout="this.src='/static/img/verge_inactive.png'"
+                                            />
+                                            <span v-bind:class="[is_dark_mode ? 'dark-tooltiptext' : 'white-tooltiptext']" id="xvg_tool_tip">Verge</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div v-bind:class="[dest_cur == 'ETH' || source_cur == 'ETH' ? 'active-class' : 'inactive-class']" style="margin-right: 20px;">
+                                    <a @click.prevent="select_currency(2)">
+                                        <div v-if="dest_cur == 'ETH' || source_cur == 'ETH'">
+                                            <img v-bind:class="[is_dark_mode ? 'dark-face' : 'white-face']" src="/static/img/eth_active.png" alt="ETH" width="30" height="30" />
+                                        </div>
+                                        <div v-else class="custom-tooltip">
+                                            <img v-bind:class="[is_dark_mode ? 'dark-face' : 'white-face']"
+                                                src="/static/img/eth_inactive.png"
+                                                alt="ETH"
+                                                width="30"
+                                                height="30"
+                                                onmouseover="this.src='/static/img/eth_active.png'"
+                                                onmouseout="this.src='/static/img/eth_inactive.png'"
+                                            />
+                                            <span v-bind:class="[is_dark_mode ? 'dark-tooltiptext' : 'white-tooltiptext']" id="eth_tool_tip">Ethereum</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div v-bind:class="[dest_cur == 'USDT' || source_cur == 'USDT' ? 'active-class' : 'inactive-class']" style="margin-right: 5px;">
+                                    <a @click.prevent="select_currency(3)">
+                                        <div v-if="dest_cur == 'USDT' || source_cur == 'USDT'">
+                                            <img v-bind:class="[is_dark_mode ? 'dark-face' : 'white-face']" src="/static/img/usdt_active.png" alt="USDT" width="30" height="30" />
+                                        </div>
+                                        <div v-else class="custom-tooltip">
+                                            <img v-bind:class="[is_dark_mode ? 'dark-face' : 'white-face']"
+                                                src="/static/img/usdt_inactive.png"
+                                                alt="USDT"
+                                                width="30"
+                                                height="30"
+                                                onmouseover="this.src='/static/img/usdt_active.png'"
+                                                onmouseout="this.src='/static/img/usdt_inactive.png'"
+                                            />
+                                            <span v-bind:class="[is_dark_mode ? 'dark-tooltiptext' : 'white-tooltiptext']" id="usdt_tool_tip">Tether USDT</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div v-bind:class="[dest_cur == 'WBTC' || source_cur == 'WBTC' ? 'active-class' : 'inactive-class']" style="margin-right: 5px;">
+                                    <a @click.prevent="select_currency(4)">
+                                        <div v-if="dest_cur == 'WBTC' || source_cur == 'WBTC'">
+                                            <img v-bind:class="[is_dark_mode ? 'dark-face' : 'white-face']" src="/static/img/wbtc_active.png" alt="WBTC" width="30" height="30" />
+                                        </div>
+                                        <div v-else class="custom-tooltip">
+                                            <img v-bind:class="[is_dark_mode ? 'dark-face' : 'white-face']"
+                                                src="/static/img/wbtc_inactive.png"
+                                                alt="WBTC"
+                                                width="30"
+                                                height="30"
+                                                onmouseover="this.src='/static/img/wbtc_active.png'"
+                                                onmouseout="this.src='/static/img/wbtc_inactive.png'"
+                                            />
+                                            <span v-bind:class="[is_dark_mode ? 'dark-tooltiptext' : 'white-tooltiptext']" id="wbtc_tool_tip">Wrapped BTC</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div v-bind:class="[dest_cur == 'YFI' || source_cur == 'YFI' ? 'active-class' : 'inactive-class']" style="margin-right: 5px;">
+                                    <a @click.prevent="select_currency(5)">
+                                        <div v-if="dest_cur == 'YFI' || source_cur == 'YFI'">
+                                            <img v-bind:class="[is_dark_mode ? 'dark-face' : 'white-face']" src="/static/img/yfi_active.png" alt="YFI" width="30" height="30" />
+                                        </div>
+                                        <div v-else class="custom-tooltip">
+                                            <img v-bind:class="[is_dark_mode ? 'dark-face' : 'white-face']"
+                                                src="/static/img/yfi_inactive.png"
+                                                alt="YFI"
+                                                width="30"
+                                                height="30"
+                                                onmouseover="this.src='/static/img/yfi_active.png'"
+                                                onmouseout="this.src='/static/img/yfi_inactive.png'"
+                                            />
+                                            <span v-bind:class="[is_dark_mode ? 'dark-tooltiptext' : 'white-tooltiptext']" id="yfi_tool_tip">Yearn.finance</span>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+
+                            <div class="row" style="margin: 0; padding: 0;">
+                                <div class="col-md-12 col-lg-12 col-xs-12 col-12" style="margin: 0; padding: 0;">
+                                    <div v-if="ex_price != 0 && min_balance < max_balance" style="padding-top: 20px;">
+                                        <div v-if="source_cur == 'BTC'">
+                                            <p style="display: inline-block;">1 [[ source_cur ]] = [[ ex_price ]] [[dest_cur]]</p>
+                                        </div>
+                                        <div v-else>
+                                            <p style="display: inline-block;">[[ ex_price ]] [[ source_cur ]] = 1 [[dest_cur]]</p>
+                                        </div>
+                                    </div>
+                                    <div v-else style="padding-top: 20px;">
+                                        <div v-if="source_cur == 'BTC'">
+                                            <p style="display: inline-block;">1 [[ source_cur ]] = [[dest_cur]]</p>
+                                        </div>
+                                        <div v-else>
+                                            <p style="display: inline-block;">[[ source_cur ]] = 1 [[dest_cur]]</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="ex_price != 0 && min_balance < max_balance">
+                                <p>Limits [[min_balance]] - [[max_balance]] [[ source_cur ]]</p>
+                            </div>
+                            <div v-else>
+                                <p>Limits - [[ source_cur ]]</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 20px;">
+                        <div class="form">
+                            <div class="row custom_row">
+                                <h4 style="width: 145px;">Send [[ source_cur ]]</h4>
+                            </div>
+                            <div class="form__xmr">
+                                <div class="row custom_row" style="width: 100%;">
+                                    <div class="col-sm-6 col-lg-5 custom_col">
+                                        <div class="amount-input">
+                                            <input v-if="invalid_amt != ''" v-bind:class="[is_dark_mode ? 'dark-input error_border' : 'white-input error_border']" id="btc" :placeholder="[[ invalid_amt ]]" v-model="source_amount" />
+                                            <input v-else v-bind:class="[is_dark_mode ? 'dark-input' : 'white-input']" id="btc" :placeholder="[[ source_currency ]] + ' Amount'" v-model="source_amount" />
+                                            <label v-bind:class="[is_dark_mode ? 'dark-switch' : 'white-switch']" style="margin-top: -29px; float: right; margin-right: 26px;">
+                                                <input type="checkbox" v-bind:disabled="toggle_disabled"
+                                                       v-bind:checked="reverse_checked" id="check_to_btc" v-on:click="onclick_reverse()"/>
+                                                <span v-bind:class="[is_dark_mode ? 'dark-slider round' : 'white-slider round']"></span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="d-block d-sm-none col-12" style="height: 30px;"></div>
+                                    <div class="col-sm-6 col-lg-7 custom_col">
+                                        <div>
+                                            <div v-if="invalid_source != ''">
+                                                <input v-bind:class="[is_dark_mode ? 'dark-input error_border' : 'white-input error_border']" id="refund" :placeholder="[[ invalid_source ]]" v-model="refund_address" />
+                                            </div>
+                                            <div v-else>
+                                                <input id="refund" v-bind:class="[is_dark_mode ? 'dark-input' : 'white-input']" :placeholder="[[ source_cur ]] + ' refund address'" v-model="refund_address" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <h4 class="xmr-title">Get [[dest_cur]]</h4>
+                            <div v-if="invalid_dst != ''" style="position: relative;">
+                                <input v-bind:class="[is_dark_mode ? 'dark-input error_border' : 'white-input error_border']" id="xmr" v-model="dst_address" :placeholder="[[ invalid_dst ]]" />
+                            </div>
+                            <div v-else style="position: relative;">
+                                <input id="xmr" v-bind:class="[is_dark_mode ? 'dark-input' : 'white-input']" v-model="dst_address" :placeholder="[[ dest_currency ]] + ' Address'" />
+                            </div>
+                            <div v-if="receive > 0" class="result">
+                                <label>You will get [[receive]] [[dest_cur]]</label>
+                            </div>
+                            <div v-else class="result" style="margin-bottom: 39px;"></div>
+                            <div v-if="invalid_address != ''">
+                                <span class="error alert-box-span custom_span_error">[[invalid_address]]</span>
+                            </div>
+                            <div v-else class="custom_hidden_div">
+                                <span class="error alert-box-span" style="visibility: hidden;">[[invalid_address]]</span>
+                            </div>
+                            <button style="position: relative;" v-bind:class="[is_dark_mode ? 'btn btn-dark dark-next-btn' : 'btn btn-dark white-next-btn']" @click.prevent="step1">NEXT</button>
+                        </div>
+                    </div>
+                </div>
+                <div v-if="status > 0 && is_loading == 0" class="step-2">
+                    <div class="row justify-content-md-center step2-content">
+                        <div class="col-md-12 col-lg-12 col-sm-12 col-12">
+                            <div v-if="status == 1" class="head_padding display-inline">
+                                <div class="warning_group left-warning">
+                                    <img v-if="timed_out || status > 2" class="left-ribbon-position" v-bind:src="ribbon" alt="BTC" width="100px" height="100px" />
+                                    <div class="warning_group-cell">
+                                        <h4>
+                                            Send only [[ source_cur ]] to this deposit address
+                                        </h4>
+                                        <p v-bind:class="[is_dark_mode ? 'dark-warning-group-p' : 'white-warning-group-p']">Sending any other currency to this address may result in the loss of your deposit.</p>
+                                    </div>
+                                </div>
+                                <div v-if="min_balance > 0" class="warning_group right-warning">
+                                    <img v-if="timed_out || status > 2" class="right-ribbon-position" v-bind:src="ribbon" alt="BTC" width="100px" height="100px" />
+                                    <div class="warning_group-cell">
+                                        <h4>
+                                            The minimum amount of deposit is [[min_balance]] [[ source_cur ]]
+                                        </h4>
+                                        <p v-bind:class="[is_dark_mode ? 'dark-warning-group-p' : 'white-warning-group-p']">If you will send less than [[min_balance]] [[ source_cur ]], you will lose that money.</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="exceed && dst_amt != 0 && lack != 0 && status < 3" class="head_padding">
+                                <div class="warning_group">
+                                    <div class="warning_group-cell">
+                                        <h4>
+                                            The over payment Notification
+                                        </h4>
+                                        <p v-bind:class="[is_dark_mode ? 'dark-warning-group-p' : 'white-warning-group-p']">We detected a overpayment of [[lack]]. You will receive [[dst_amt]] [[dest_cur]].</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else-if="underpay && dst_amt != 0 && lack != 0 && status < 3" class="head_padding">
+                                <div class="warning_group">
+                                    <div class="warning_group-cell">
+                                        <h4>
+                                            The under payment Notification
+                                        </h4>
+                                        <p v-bind:class="[is_dark_mode ? 'dark-warning-group-p' : 'white-warning-group-p']">We detected a underpayment of [[lack]]. You will receive [[dst_amt]] [[dest_cur]].</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else-if="status > 1 && !timed_out && status < 3" class="head_padding">
+                                <div class="warning_group">
+                                    <div class="warning_group-cell">
+                                        <h4>
+                                            [[source_currency]] was received in good matter
+                                        </h4>
+                                        <p v-bind:class="[is_dark_mode ? 'dark-warning-group-p' : 'white-warning-group-p']">
+                                           We detected your payment in good matter. You will receive [[dst_amt]] [[dest_cur]].
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else-if="status == 3 && !is_loaded" class="head_padding">
+                                <div class="warning_group">
+                                    <div class="warning_group-cell">
+                                        <div v-if="!is_rated" class="row custom_row" style="justify-content: center !important;">
+                                            <div class="col-sm-12 col-md-4 col-lg-4 col-12 rating star-position">
+                                                <input type="checkbox" name="rating" id="r2"/>
+                                                <label id="label-r2" v-bind:class="[is_dark_mode ? 'dark-normal-star-label' : 'white-normal-star-label']"
+                                                       @mouseover="star_hover('r2')" @mouseout="star_out('r2')" @click="star_click('r2')"></label>
+                                                <input type="checkbox" name="rating" id="r3" />
+                                                <label id="label-r3" v-bind:class="[is_dark_mode ? 'dark-middle-star-label' : 'white-middle-star-label']"
+                                                       @mouseover="star_hover('r3')" @mouseout="star_out('r3')" @click="star_click('r3')"></label>
+                                                <input type="checkbox" name="rating" id="r1" />
+                                                <label id="label-r1" v-bind:class="[is_dark_mode ? 'dark-normal-star-label' : 'white-normal-star-label']"
+                                                       @mouseover="star_hover('r1')" @mouseout="star_out('r1')" @click="star_click('r1')"></label>
+                                            </div>
+                                            <div class="col-sm-12 col-md-5 col-lg-4 col-12">
+                                                <p class="color-orange-review">Publicize epistolium</p>
+                                                <textarea id="review_desc" v-bind:class="[is_dark_mode ? 'rating-textarea dark-input' : 'rating-textarea white-input']" rows="6" placeholder="Describe your experience"></textarea>
+                                            </div>
+                                            <div class="col-sm-12 col-md-3 col-lg-4 col-12 share-position">
+                                                <div class="rating-post-btn nav-item nav-btn"
+                                                     v-bind:class="[is_dark_mode ? 'dark-rating-post-btn' : 'white-rating-post-btn']" @click="review_us">
+                                                    <a class="waves-effect waves-light" style="margin-top: 7px">SHARE</a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-else-if="status > 2 && is_loaded" class="head_padding">
+                                <div class="warning_group completed_warning">
+                                    <img class="ribbon-position" v-bind:src="ribbon" alt="BTC" width="100px" height="100px" />
+                                    <div v-bind:class="[is_dark_mode ? 'dark-scroll warning-transaction-field' : 'white-scroll warning-transaction-field']">
+                                        <div v-for="data in split_out_tx_list[page_no_out_tx]" style="line-height: 20px; direction: ltr;">
+                                            <div class="row custom_row">
+                                                <div class="col-10" style="padding-left: 10px;">
+                                                    <a class="color-orange hash_font_style" v-bind:href="source_tx_url + data.tx_id" target="_blank">[[data.tx_id]]</a>
+                                                </div>
+                                            </div>
+                                            <div class="row custom_row">
+                                                <div class="col-10" style="padding-left: 10px;">
+                                                    <div v-if="data.status == 'completed'">
+                                                        <div v-for="it in data.tx" style="display: flex">
+                                                            <div style="width: 13px;">
+                                                                <img src="/static/img/icons8-green-circle-48.png" style="width: 20px; float: left;" />
+                                                            </div>
+                                                            <div style="width: 19px;">
+                                                                <img v-bind:src="dest_icon_path" style="width: 15px; margin-bottom: 1px;"/>
+                                                            </div>
+                                                            <div style="width: 86%;">
+                                                                <a class="hash_font_style color_green" v-bind:href="dest_tx_url + it" target="_blank"> [[it]]</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div v-if="data.status == 'refunded'">
+                                                        <div v-for="it in data.tx" style="display: flex">
+                                                            <div style="width: 13px;">
+                                                                <img src="/static/img/icons8-green-circle-48.png" style="width: 20px; float: left;" />
+                                                            </div>
+                                                            <div style="width: 19px;">
+                                                                <img v-bind:src="dest_icon_path" style="width: 15px; margin-bottom: 1px;"/>
+                                                            </div>
+                                                            <div style="width: 86%;">
+                                                                <a class="hash_font_style color_green" v-bind:href="dest_tx_url + it" target="_blank"> [[it]]</a>
+                                                            </div>
+                                                        </div>
+                                                        <div v-for="it in data.tx_ref" style="display: flex">
+                                                            <div style="width: 13px;">
+                                                                <img src="/static/img/icons8-orange-circle-48.png" style="width: 20px; float: left;" />
+                                                            </div>
+                                                            <div style="width: 19px;">
+                                                                <img v-bind:src="source_icon_path" style="width: 15px; margin-bottom: 1px;"/>
+                                                            </div>
+                                                            <div style="width: 86%;">
+                                                                <a class="hash_font_style color_red" v-bind:href="dest_tx_url + it" target="_blank"> [[it]]</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row custom_row">
+                                                <div class="col-10" style="padding-left: 10px;">
+                                                    <div v-if="data.status == 'completed'">
+                                                        <p v-bind:class="[is_dark_mode ? 'hash_result_amount dark-text' : 'hash_result_amount white-text']">Completed in [[data.processing_time]]</p>
+                                                    </div>
+                                                    <div v-else-if="data.status == 'refunded'">
+                                                        <p v-bind:class="[is_dark_mode ? 'hash_result_amount dark-text' : 'hash_result_amount white-text']">Order already completed or expired.</p>
+                                                    </div>
+                                                    <div v-else-if="data.status == 'canceled'">
+                                                        <p v-bind:class="[is_dark_mode ? 'hash_result_amount dark-text' : 'hash_result_amount white-text']">[[data.comment]]</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div v-if="split_out_tx_list.length > 1" style="padding-right: 15px;">
+                                        <div style="display: flex; float: right;">
+                                            <p class="tx_page_tab">[[page_no_out_tx + 1]] / [[split_out_tx_list.length]]</p>
+                                            <a v-bind:class="[is_dark_mode ? 'carousel-control-prev left carousel-control dark-carousel-control' : 'carousel-control-prev left carousel-control white-carousel-control']"
+                                               role="button" data-slide="prev" @click="prev_tx_page()">
+                                                <i aria-hidden="true" class="fas fa-angle-left"></i>
+                                            </a>
+                                            <a v-bind:class="[is_dark_mode ? 'carousel-control-next right carousel-control dark-carousel-control' : 'carousel-control-next right carousel-control white-carousel-control']"
+                                               role="button" data-slide="next" @click="next_tx_page()">
+                                                <i aria-hidden="true" class="fas fa-angle-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!--<br />-->
+                            <div v-bind:class="[status < 2 || is_loaded? 'border_group deposit-mark-style' : 'process-mark-style']">
+                                <br />
+                                <div class="row custom_row">
+                                    <div class="col-md-4 col-lg-4 col-sm-4 col-4">
+                                        <div v-if="status < 3">
+                                            <h4>
+                                                Deposit [[ source_currency ]]
+                                            </h4>
+                                        </div>
+                                        <div v-else-if="status == 3">
+                                            <h4>
+                                                Order Complete
+                                            </h4>
+                                        </div>
+                                        <div v-else-if="status == 4">
+                                            <h4>
+                                                Order Refund
+                                            </h4>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8 col-lg-8 col-sm-8 col-8">
+                                        <img style="float: right; padding-top: 2px;" v-bind:src="source_icon_path" alt="BTC" width="42px" height="42px" />
+                                        <div style="float: right; color: #ff5703 !important; text-align: right; padding-right: 5px;">
+                                            <div v-if="status < 2">
+                                                <h5>
+                                                    [[source_amount]] [[ source_cur ]]&nbsp;
+                                                </h5>
+                                                <h5>
+                                                    [[receive]] [[dest_cur]]&nbsp;
+                                                </h5>
+                                            </div>
+                                            <div v-else>
+                                                <div v-if="dst_amt == 0">
+                                                    <h5>
+                                                        [[source_amount]] [[ source_cur ]]&nbsp;
+                                                    </h5>
+                                                    <h5>
+                                                        [[receive]] [[dest_cur]]&nbsp;
+                                                    </h5>
+                                                </div>
+                                                <div v-else>
+                                                    <h5>
+                                                        [[received]] [[ source_cur ]]&nbsp;
+                                                    </h5>
+                                                    <h5>
+                                                        [[dst_amt]] [[dest_cur]]&nbsp;
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br />
+                                <div v-if="status == 1 || (status > 2 && is_loaded)">
+                                    <div v-bind:class="[is_dark_mode ? 'row custom_row dark-rest-bar' : 'row custom_row white-rest-bar']" id="myProgress">
+                                        <div id="myBar" v-bind:class="[is_dark_mode ? 'dark-progress-bar' : 'white-progress-bar']"></div>
+                                    </div>
+                                    <div class="row custom_row">
+                                        <div class="col-md-4 col-lg-4 col-sm-4 col-4">
+                                            <timer :time="timeout" :transform="transform" :emit-events="true" @end="timerEnd" @progress="handleCountdownProgress">
+                                                <template slot-scope="props">
+                                                    <span style="color: #7b8095; !important;">[[ props.hours]]:[[ props.minutes ]]:[[ props.seconds]]</span>
+                                                </template>
+                                            </timer>
+                                        </div>
+                                        <div class="col-md-8 col-lg-8 col-sm-8 col-8">
+                                            <div v-if="source_cur == 'BTC'">
+                                                <span style="float: right; color: #7b8095; !important;">1 [[ source_cur ]] &#x021C4; [[ex_price]] [[dest_cur]]</span>
+                                            </div>
+                                            <div v-else>
+                                                <span style="float: right; color: #7b8095; !important;">[[ ex_price ]] [[ source_cur ]] &#x021C4; 1 [[dest_cur]]</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="qr-code-address">
+                                        <div>
+                                            <qr-code :text="qr_text" align="center"></qr-code>
+                                        </div>
+                                        <div class="deposit-address">
+                                            <h4>Copy Address & Amount</h4>
+                                            <div>
+                                                <div class="row input-group-table custom_row" style="margin-bottom: 5px;">
+                                                    <span v-bind:class="[is_dark_mode ? 'dark-input-group-s' : 'white-input-group-s']" style="width: 68px !important; border-top-left-radius: 4px !important; border-bottom-left-radius: 4px !important;">[[ source_cur ]]</span>
+                                                    <input v-if="timed_out" v-bind:class="[is_dark_mode ? 'timed-out-input dark-input-group-i' : 'timed-out-input white-input-group-i']" id="input_source_amount" v-model="source_amount" readonly />
+                                                    <input v-else v-bind:class="[is_dark_mode ? 'time-input dark-input-group-i' : 'time-input white-input-group-i']" id="input_source_amount" v-model="source_amount" readonly />
+                                                    <span
+                                                        v-on:click="copy_function('input_source_amount')"
+                                                        v-bind:class="[is_dark_mode ? 'dark-input-group-s fa fa-copy btn' : 'white-input-group-s fa fa-copy btn']"
+                                                        style="border-top-right-radius: 4px !important; border-bottom-right-radius: 4px !important;"
+                                                    ></span>
+                                                </div>
+                                                <div class="row input-group-table custom_row">
+                                                    <span v-bind:class="[is_dark_mode ? 'dark-input-group-s fas fa-wallet' : 'white-input-group-s fas fa-wallet']" style="width: 68px !important; border-top-left-radius: 4px !important; border-bottom-left-radius: 4px !important;"></span>
+                                                    <input v-if="timed_out" v-bind:class="[is_dark_mode ? 'timed-out-input dark-input-group-i' : 'timed-out-input white-input-group-i']" id="input_source_address" v-model="source_address" readonly />
+                                                    <input v-else v-bind:class="[is_dark_mode ? 'time-input dark-input-group-i' : 'time-input white-input-group-i']" id="input_source_address" v-model="source_address" readonly />
+                                                    <span
+                                                        v-on:click="copy_function('input_source_address')"
+                                                        v-bind:class="[is_dark_mode ? 'dark-input-group-s fa fa-copy btn' : 'white-input-group-s fa fa-copy btn']"
+                                                        style="border-top-right-radius: 4px !important; border-bottom-right-radius: 4px !important;"
+                                                    ></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-if="(status == 2 && !timed_out) || (status == 3 && !is_loaded)">
+                                    <div v-if="status == 2">
+                                        <div class="row" style="justify-content: center;">
+                                            <img v-bind:src="[is_dark_mode ? '/static/img/gear-black.gif' : '/static/img/gear-white.gif']" alt="BTC" style="height: 32px; width: 32px; float: left;" />
+                                            <p v-bind:class="[is_dark_mode ? 'dark-order_process' : 'white-order_process']">Confirming...</p>
+                                        </div>
+                                    </div>
+                                    <div v-if="status == 3">
+                                        <div class="row" style="justify-content: center;">
+                                            <img src="/static/img/64x64.png" alt="BTC" style="height: 32px; width: 32px;" />
+                                            <p v-bind:class="[is_dark_mode ? 'dark-order_process' : 'white-order_process']" style="color: #2ecc71;">Completed</p>
+                                        </div>
+                                    </div>
+                                    <div v-if="status == 4">
+                                        <div class="row" style="justify-content: center;">
+                                            <img src="/static/img/x_circle.png" alt="BTC" style="height: 32px; width: 32px;" />
+                                            <p v-bind:class="[is_dark_mode ? 'dark-order_process' : 'white-order_process']" style="color: red;">Refunded</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div v-if="(status == 2 && !timed_out) || (status == 3 && !is_loaded)" class="border_group out_tx">
+                                <br />
+                                <div class="row custom_row">
+                                    <div class="col-md-6 col-lg-6 col-sm-6 col-6 custom_col">
+                                        <h4>[[ source_currency ]] Transactions</h4>
+                                    </div>
+                                    <div v-if="split_out_tx_list.length > 1" class="col-md-6 col-lg-6 col-sm-6 col-6 custom_col">
+                                        <div style="display: inline-flex; float: right;">
+                                            <p class="tx_page_tab">[[page_no_out_tx + 1]] / [[split_out_tx_list.length]]</p>
+                                            <a v-bind:class="[is_dark_mode ? 'carousel-control-prev left carousel-control dark-carousel-control' : 'carousel-control-prev left carousel-control white-carousel-control']"
+                                               role="button" data-slide="prev" @click="prev_tx_page()">
+                                                <i aria-hidden="true" class="fas fa-angle-left"></i>
+                                            </a>
+                                            <a v-bind:class="[is_dark_mode ? 'carousel-control-next right carousel-control dark-carousel-control' : 'carousel-control-next right carousel-control white-carousel-control']"
+                                               role="button" data-slide="next" @click="next_tx_page()">
+                                                <i aria-hidden="true" class="fas fa-angle-right"></i>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div v-bind:class="[is_dark_mode ? 'dark-scroll transaction-field' : 'white-scroll transaction-field']">
+                                    <div v-for="data in split_out_tx_list[page_no_out_tx]" class="transaction-output">
+                                        <div v-if="data.step == 8">
+                                            <div class="row custom_row">
+                                                <div class="col-10" style="padding-left: 10px;">
+                                                    <a class="color-orange hash_font_style" v-bind:href="source_tx_url + data.tx_id" target="_blank">[[data.tx_id]]</a>
+                                                </div>
+                                            </div>
+                                            <div class="row custom_row">
+                                                <div class="col-10" style="padding-left: 10px;">
+                                                    <div v-if="data.status == 'completed'">
+                                                        <div v-for="it in data.tx" style="display: flex">
+                                                            <div style="width: 13px;">
+                                                                <img src="/static/img/icons8-green-circle-48.png" style="width: 20px; float: left;" />
+                                                            </div>
+                                                            <div style="width: 19px;">
+                                                                <img v-bind:src="dest_icon_path" style="width: 15px; margin-bottom: 1px;"/>
+                                                            </div>
+                                                            <div style="width: 86%;">
+                                                                <a class="hash_font_style color_green" v-bind:href="dest_tx_url + it" target="_blank"> [[it]]</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div v-if="data.status == 'refunded'">
+                                                        <div v-for="it in data.tx" style="display: flex">
+                                                            <div style="width: 13px;">
+                                                                <img src="/static/img/icons8-green-circle-48.png" style="width: 20px; float: left;" />
+                                                            </div>
+                                                            <div style="width: 19px;">
+                                                                <img v-bind:src="dest_icon_path" style="width: 15px; margin-bottom: 1px;"/>
+                                                            </div>
+                                                            <div style="width: 86%;">
+                                                                <a class="hash_font_style color_green" v-bind:href="dest_tx_url + it" target="_blank"> [[it]]</a>
+                                                            </div>
+                                                        </div>
+                                                        <div v-for="it in data.tx_ref" style="display: flex">
+                                                            <div style="width: 13px;">
+                                                                <img src="/static/img/icons8-orange-circle-48.png" style="width: 20px; float: left;" />
+                                                            </div>
+                                                            <div style="width: 19px;">
+                                                                <img v-bind:src="source_icon_path" style="width: 15px; margin-bottom: 1px;"/>
+                                                            </div>
+                                                            <div style="width: 86%;">
+                                                                <a class="hash_font_style color_red" v-bind:href="dest_tx_url + it" target="_blank"> [[it]]</a>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row custom_row">
+                                                <div class="col-10" style="padding-left: 10px;">
+                                                    <div v-if="data.status == 'completed'">
+                                                        <p v-bind:class="[is_dark_mode ? 'hash_result_amount dark-text' : 'hash_result_amount white-text']">Completed in [[data.processing_time]]</p>
+                                                    </div>
+                                                    <div v-else-if="data.status == 'refunded'">
+                                                        <p v-bind:class="[is_dark_mode ? 'hash_result_amount dark-text' : 'hash_result_amount white-text']">Order already completed or expired.</p>
+                                                    </div>
+                                                    <div v-else-if="data.status == 'canceled'">
+                                                        <p v-bind:class="[is_dark_mode ? 'hash_result_amount dark-text' : 'hash_result_amount white-text']">[[data.comment]]</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div v-else>
+                                            <div class="row custom_row">
+                                                <div class="col-md-8 col-lg-8 col-sm-8 col-8" style="padding-left: 0 !important;">
+                                                    <div v-if="data.comment == 'low'" class="row deposit-process">
+                                                        <div style="width: 24px;">
+                                                            <img src="/static/img/icons8-orange-circle-48.png" style="width: 19px; float: left;" />
+                                                        </div>
+                                                        <div style="width: 93%;">
+                                                            <a class="hash_color_gray hash_font_style" v-bind:href="source_tx_url + data.tx_id" target="_blank">[[data.tx_id]]</a>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="data.comment == 'reserve'" class="row deposit-process">
+                                                        <div style="width: 24px;">
+                                                            <img src="/static/img/icons8-green-circle-48.png" style="width: 19px; float: left;" />
+                                                        </div>
+                                                        <div style="width: 93%;">
+                                                            <a class="color_green hash_font_style" v-bind:href="source_tx_url + data.tx_id" target="_blank">[[data.tx_id]]</a>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="data.comment == 'exceed'" class="row deposit-process">
+                                                        <div style="width: 24px;">
+                                                            <img src="/static/img/icons8-orange-circle-48.png" style="width: 19px; float: left;" />
+                                                        </div>
+                                                        <div style="width: 93%;">
+                                                            <a class="hash_color_gray hash_font_style" v-bind:href="source_tx_url + data.tx_id" target="_blank">[[data.tx_id]]</a>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="data.status == 'completed'" class="row deposit-process">
+                                                        <div style="width: 24px;">
+                                                            <img src="/static/img/icons8-green-circle-48.png" style="width: 19px; float: left;" />
+                                                        </div>
+                                                        <div style="width: 93%;">
+                                                            <a class="color_green hash_font_style" v-bind:href="source_tx_url + data.tx_id" target="_blank">[[data.tx_id]]</a>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="data.status == 'queue'" class="row deposit-process">
+                                                        <div style="width: 24px;">
+                                                            <img src="/static/img/icons8-orange-circle-48.png" style="width: 19px; float: left;" />
+                                                        </div>
+                                                        <div style="width: 93%;">
+                                                            <a class="hash_color_gray hash_font_style" v-bind:href="source_tx_url + data.tx_id" target="_blank">[[data.tx_id]]</a>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="data.status == 'refunded'" class="row deposit-process">
+                                                        <div style="width: 24px;">
+                                                            <img src="/static/img/icons8-red-circle-48.png" style="width: 19px; float: left;" />
+                                                        </div>
+                                                        <div style="width: 93%;">
+                                                            <a class="color_red hash_font_style" v-bind:href="source_tx_url + data.tx_id" target="_blank">[[data.tx_id]]</a>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else-if="data.status == 'canceled'" class="row deposit-process">
+                                                        <div style="width: 24px;">
+                                                            <img src="/static/img/icons8-red-circle-48.png" style="width: 19px; float: left;" />
+                                                        </div>
+                                                        <div style="width: 93%;">
+                                                            <a class="color_red hash_font_style" v-bind:href="source_tx_url + data.tx_id" target="_blank">[[data.tx_id]]</a>
+                                                        </div>
+                                                    </div>
+                                                    <div v-else class="row deposit-process">
+                                                        <div style="width: 24px;">
+                                                            <img src="/static/img/icons8-orange-circle-48.png" style="width: 19px; float: left;" />
+                                                        </div>
+                                                        <div style="width: 93%;">
+                                                            <a class="hash_color_gray hash_font_style" v-bind:href="source_tx_url + data.tx_id" target="_blank">[[data.tx_id]]</a>
+                                                        </div>
+                                                    </div>
+                                                    <div v-if="data.confirmations <= data.min_conf">
+                                                        <p style="font-size: 10px; color: #7b8095; margin-bottom: 0">CONFIRMATIONS: [[data.confirmations]]/[[data.min_conf]]</p>
+                                                    </div>
+                                                    <div v-else>
+                                                        <p style="font-size: 10px; color: #7b8095; margin-bottom: 0">CONFIRMATIONS: [[data.min_conf]]/[[data.min_conf]]</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-lg-4 col-sm-4 col-4" style="justify-content: flex-end; padding-left: 0 !important; padding-right: 0;">
+                                                    <div v-if="data.comment == 'exceed'">
+                                                        <p class="hash_result_amount" style="text-align: right">Deposit exceeded limit, possibility of refund</p>
+                                                    </div>
+                                                    <div v-else-if="data.comment == 'low'">
+                                                        <p class="hash_result_amount" style="text-align: right">Low priority transaction</p>
+                                                    </div>
+                                                    <div v-else-if="data.comment == 'reserve'">
+                                                        <p class="hash_result_amount" style="text-align: right">Reserved</p>
+                                                    </div>
+                                                    <div v-else-if="data.comment == 'queued'">
+                                                        <p class="hash_result_amount">Queue, our balance is locked</p>
+                                                    </div>
+                                                    <div v-else-if="data.status == 'queue'">
+                                                        <p class="hash_result_amount" style="text-align: right">[[data.comment]]</p>
+                                                    </div>
+                                                    <div v-else-if="data.status == 'completed'">
+                                                        <p class="hash_result_amount" style="text-align: right">Completed</p>
+                                                    </div>
+                                                    <div v-else-if="data.status == 'refunded'">
+                                                        <p class="hash_result_amount" style="text-align: right">[[data.comment]]</p>
+                                                    </div>
+                                                    <div v-else-if="data.status == 'canceled'">
+                                                        <p class="hash_result_amount" style="text-align: right">[[data.comment]]</p>
+                                                    </div>
+                                                    <div v-else>
+                                                        <p class="hash_result_amount" style="text-align: right">Confirming</p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row custom_row">
+                                                <div class="col-md-8 col-lg-8 col-sm-8 col-8" style="padding-left: 0 !important; padding-right: 0;">
+                                                    <div v-if="data.confirmations >= data.min_conf">
+                                                        <p style="font-size: 10px; color: #7b8095; margin-bottom: 0">CONFIRMED IN [[data.confirming_time]]</p>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4 col-lg-4 col-sm-4 col-4" style="padding-right: 0 !important;">
+                                                    <p class="hash_result_amount" style="text-align: right">[[data.amount]] [[ source_cur ]]</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div v-else-if="is_loading == 1" class="step-2">
+                    <div class="row loading-or-sorry" style="justify-content: center;">
+                        <img v-bind:src="[is_dark_mode ? '/static/img/gear-black.gif' : '/static/img/gear-white.gif']" alt="BTC" style="height: 32px; width: 32px;" />
+                        <p v-bind:class="[is_dark_mode ? 'dark-order_process dark-loading-color' : 'white-order_process white-loading-color']">Loading...</p>
+                    </div>
+                </div>
+                <div v-else-if="is_loading == -1" class="step-2">
+                    <div class="row loading-or-sorry" style="justify-content: center;">
+                        <img src="/static/img/x_circle.png" alt="BTC" style="height: 32px; width: 32px;" />
+                        <p class="white-order_process no-order-color">Sorry, there is no any order with this address!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock %}

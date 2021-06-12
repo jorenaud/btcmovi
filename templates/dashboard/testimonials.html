@@ -1,0 +1,138 @@
+{% extends 'dashboard/base.html' %}
+{% block page_content %}
+    <div id="review-app">
+        <div class="fdc row custom_row">
+            <div class="step-2">
+                <div class="border_group out_tx">
+                    <div class="row custom_row center-warning">
+                        <div v-bind:class="[is_dark_mode ? 'dark-body' : 'white-body']" class="warning_group noselect" style="height: 117px !important;">
+                            <img v-if="last_review != null && last_review.rate == 1" class="star-ribbon-position noselect" v-bind:src="one_star_ribbon" alt="1_star" width="100px" height="100px" />
+                            <img v-else-if="last_review != null && last_review.rate == 2" class="star-ribbon-position noselect" v-bind:src="two_stars_ribbon" alt="2_star" width="100px" height="100px" />
+                            <img v-else-if="last_review != null && last_review.rate == 3" class="star-ribbon-position noselect" v-bind:src="three_stars_ribbon" alt="3_star" width="100px" height="100px" />
+                            <img v-else class="star-ribbon-position noselect" v-bind:src="zero_star_ribbon" alt="0_star" width="100px" height="100px" />
+                            <div class="inner-warning-group">
+                                <iframe v-if="is_dark_mode" class="testimonial-background-position-1" src="/static/img/background_dark.svg" frameBorder="0" scrolling="no"></iframe>
+                                <iframe v-else class="testimonial-background-position-1" src="/static/img/background_white.svg" frameBorder="0" scrolling="no"></iframe>
+                                <div v-if="last_review != null" v-bind:class="[is_dark_mode ? 'dark-scroll' : 'white-scroll']" class="warning-testimonial-field">
+                                    <div class="row custom_row testimonial-date">
+                                        <p v-bind:class="[last_review.source_cur != 'BTC' ? 'color-blue-review' : 'color-orange-review']"
+                                           class="testimonial-p-date noselect" v-bind:title="last_review.create_date">
+                                            [[last_review.ago_min]]
+                                        </p>
+                                    </div>
+                                    <div class="custom_row row testimonial-amount">
+                                        <div class="testimonial-amount-style">
+                                            <p v-if="is_dark_mode" v-bind:class="[last_review.source_cur != 'BTC' ? 'color-blue-review dark-blue-amount-background' : 'color-orange-review dark-orange-amount-background']"
+                                               class="testimonial-p-amount noselect">
+                                                [[last_review.amount]]
+                                            </p>
+                                            <p v-else v-bind:class="[last_review.source_cur != 'BTC' ? 'color-blue-review white-blue-amount-background' : 'color-orange-review white-orange-amount-background']"
+                                               class="testimonial-p-amount noselect">
+                                                [[last_review.amount]]
+                                            </p>
+                                        </div>
+                                        <div class="testimonial-description-div">
+                                            <p v-bind:class="[last_review.source_cur != 'BTC' ? 'color-blue-review' : 'color-orange-review']" class="testimonial-p-description noselect">“[[last_review.description]]”</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row custom_row">
+                        <div v-if="split_reviews.length > 1">
+                            <div class="testimonial-arrow">
+                                <p class="tx_page_tab" style="margin-right: 14px; margin-left: 0">[[page_no + 1]] / [[split_reviews.length]]</p>
+                                <a v-bind:class="[is_dark_mode ? 'carousel-control-prev left carousel-control dark-carousel-control' : 'carousel-control-prev left carousel-control white-carousel-control']"
+                                   role="button" data-slide="prev" @click="prev_review_page()">
+                                    <i aria-hidden="true" class="fas fa-angle-left"></i>
+                                </a>
+                                <a v-bind:class="[is_dark_mode ? 'carousel-control-next right carousel-control dark-carousel-control' : 'carousel-control-next right carousel-control white-carousel-control']"
+                                   role="button" data-slide="next" @click="next_review_page()">
+                                    <i aria-hidden="true" class="fas fa-angle-right"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row custom_row">
+                        <p class="noselect color-orange-review">Order reviews</p>
+                    </div>
+                    <div v-if="is_dark_mode" class="row custom_row testimonial-field">
+                        <div v-for="(review, index) in split_reviews[page_no]"
+                             v-bind:class="[split_reviews[page_no][1] == null && index == 0 ? 'center-warning'
+                             : split_reviews[page_no][index] == null ? 'right-warning-hidden'
+                             : index % 2 == 0 ? 'left-warning' : 'right-warning']"
+                             class="warning_group dark-body noselect" style="height: 117px !important;">
+                            <img v-if="review != null && review.rate == 1" class="star-ribbon-position noselect" v-bind:src="one_star_ribbon" alt="1_star" width="100px" height="100px" />
+                            <img v-else-if="review != null && review.rate == 2" class="star-ribbon-position noselect" v-bind:src="two_stars_ribbon" alt="2_star" width="100px" height="100px" />
+                            <img v-else-if="review != null && review.rate == 3" class="star-ribbon-position noselect" v-bind:src="three_stars_ribbon" alt="3_star" width="100px" height="100px" />
+                            <img v-else class="star-ribbon-position noselect" v-bind:src="zero_star_ribbon" alt="0_star" width="100px" height="100px" />
+                            <div class="inner-warning-group">
+                                <iframe v-bind:class="[split_reviews[page_no][1] == null? 'testimonial-background-position-4': index % 2 == 0 ? 'testimonial-background-position-2' : 'testimonial-background-position-3']"
+                                        src="/static/img/background_dark.svg" frameBorder="0" scrolling="no"></iframe>
+                                <div v-if="review != null" v-bind:class="[is_dark_mode ? 'dark-scroll' : 'white-scroll']" class="warning-testimonial-field">
+                                    <div class="row custom_row testimonial-date">
+                                        <p v-bind:class="[review.source_cur != 'BTC' ? 'color-blue-review' : 'color-orange-review']"
+                                           class="testimonial-p-date noselect" v-bind:title="review.create_date">
+                                            [[review.ago_min]]</p>
+                                    </div>
+                                    <div class="custom_row row testimonial-amount">
+                                        <div class="testimonial-amount-style">
+                                            <p v-if="is_dark_mode" v-bind:class="[review.source_cur != 'BTC' ? 'color-blue-review dark-blue-amount-background' : 'color-orange-review dark-orange-amount-background']"
+                                               class="testimonial-p-amount noselect">
+                                                [[review.amount]]
+                                            </p>
+                                            <p v-else v-bind:class="[review.source_cur != 'BTC' ? 'color-blue-review white-blue-amount-background' : 'color-orange-review white-orange-amount-background']"
+                                               class="testimonial-p-amount noselect">
+                                                [[review.amount]]
+                                            </p>
+                                        </div>
+                                        <div class="testimonial-description-div">
+                                            <p v-bind:class="[review.source_cur != 'BTC' ? 'color-blue-review' : 'color-orange-review']" class="testimonial-p-description noselect">“[[review.description]]”</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-else class="row custom_row testimonial-field">
+                        <div v-for="(review, index) in split_reviews[page_no]"
+                             v-bind:class="[split_reviews[page_no][1] == null && index == 0 ? 'center-warning' : split_reviews[page_no][index] == null ? 'right-warning-hidden' : index % 2 == 0 ? 'left-warning' : 'right-warning']"
+                             class="warning_group white-body noselect" style="height: 117px !important;">
+                            <img v-if="review != null && review.rate == 1" class="star-ribbon-position noselect" v-bind:src="one_star_ribbon" alt="1_star" width="100px" height="100px" />
+                            <img v-else-if="review != null && review.rate == 2" class="star-ribbon-position noselect" v-bind:src="two_stars_ribbon" alt="2_star" width="100px" height="100px" />
+                            <img v-else-if="review != null && review.rate == 3" class="star-ribbon-position noselect" v-bind:src="three_stars_ribbon" alt="3_star" width="100px" height="100px" />
+                            <img v-else class="star-ribbon-position noselect" v-bind:src="zero_star_ribbon" alt="0_star" width="100px" height="100px" />
+                            <div class="inner-warning-group">
+                                <iframe v-bind:class="[split_reviews[page_no][1] == null? 'testimonial-background-position-4': index % 2 == 0 ? 'testimonial-background-position-2' : 'testimonial-background-position-3']"
+                                        src="/static/img/background_white.svg" frameBorder="0" scrolling="no"></iframe>
+                                <div v-if="review != null" v-bind:class="[is_dark_mode ? 'dark-scroll' : 'white-scroll']" class="warning-testimonial-field">
+                                    <div class="row custom_row testimonial-date">
+                                        <p v-bind:class="[review.source_cur != 'BTC' ? 'color-blue-review' : 'color-orange-review']"
+                                           class="testimonial-p-date noselect" v-bind:title="review.create_date">
+                                            [[review.ago_min]]</p>
+                                    </div>
+                                    <div class="custom_row row testimonial-amount">
+                                        <div class="testimonial-amount-style">
+                                            <p v-if="is_dark_mode" v-bind:class="[review.source_cur != 'BTC' ? 'color-blue-review dark-blue-amount-background' : 'color-orange-review dark-orange-amount-background']"
+                                               class="testimonial-p-amount noselect">
+                                                [[review.amount]]
+                                            </p>
+                                            <p v-else v-bind:class="[review.source_cur != 'BTC' ? 'color-blue-review white-blue-amount-background' : 'color-orange-review white-orange-amount-background']"
+                                               class="testimonial-p-amount noselect">
+                                                [[review.amount]]
+                                            </p>
+                                        </div>
+                                        <div class="testimonial-description-div">
+                                            <p v-bind:class="[review.source_cur != 'BTC' ? 'color-blue-review' : 'color-orange-review']" class="testimonial-p-description noselect">“[[review.description]]”</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

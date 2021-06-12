@@ -1,0 +1,74 @@
+{% extends 'dashboard/base.html' %}
+{% block page_content %}
+    <div class="bg-gradiant">
+            <div class="container">
+                    <h1 class="text-center color-blue font-weight-bold">Get Help Right Now by <br>Writing to Us.</h1>
+            </div>
+        </div>
+
+<!-- section 1 -->
+
+        <section class="text-center text-lg-left dark-grey-text my-container">
+
+          <!--Grid row-->
+          <div class="row">
+
+          	<!--Grid column-->
+            <div class="col-md-5 mb-4 mb-md-0">
+            <h3 class="font-weight-bold color-blue sec_title">Email us Now</h3>
+            <div class="border-btm"></div>
+            <p class="text-muted">Contact us if you have any questions about services.</p>
+            <a href="tel:+800475 1232">
+              <span class="list-text color-orange cnt_number" style="font-size: 40px; font-weight: bold;line-height: 42px;">+800 4759 1232</span>
+            </a>
+            <hr>
+            <p class="mb-2 color-gray">Mon - Fri: 8:00 am to 8:00 pm<br>Sat - Sun: from 8:00 to 16:00</p>
+            <hr>
+            <p class="mb-2 color-gray">3674 Harrison Street, San Francisco,<br>94143,CA, USA.</p>
+
+            </div>
+            <!--Grid column-->
+
+            <!--Grid column-->
+           <div class="col-md-7 mb-lg-0 CNT_FRM_SPAC">
+               <div>
+                   <input type="text" v-bind:class="[is_dark_mode ? 'contact-padding dark-input' : 'contact-padding white-input']" id="form-company" placeholder="E-mail:" autofocus="">
+               </div>
+               <br>
+               <div>
+                    <input type="text" v-bind:class="[is_dark_mode ? 'contact-padding dark-input' : 'contact-padding white-input']" id="form-company" placeholder="Phone:">
+               </div>
+               <br>
+               <div>
+                    <input type="text" v-bind:class="[is_dark_mode ? 'contact-padding dark-input' : 'contact-padding white-input']" id="form-company" placeholder="Subjects:">
+               </div>
+               <br>
+               <textarea v-bind:class="[is_dark_mode ? 'contact-padding dark-input' : 'contact-padding white-input']" rows="6" placeholder="Messages:"></textarea>
+               <br>
+               <input type="submit" value="Contact" class="wpcf7-form-control wpcf7-submit contact-button">
+            </div>
+            <!--Grid column-->
+
+          </div>
+          <!--Grid row-->
+
+        </section>
+<!-- end secyion 1 -->
+
+
+    <div class="container-fluid my-container">
+
+      <!-- Section: Block Content -->
+      <section class="mb-4">
+      <!-- Google Maps -->
+        <div id="full-width-map" class="z-depth-1-half map-container" style="height: 500px">
+          <iframe src="https://maps.google.com/maps?q=manhatan&t=&z=13&ie=UTF8&iwloc=&output=embed" frameborder="0"
+            style="border:0" allowfullscreen></iframe>
+        </div>
+        <!-- Google Maps -->
+
+      </section>
+      <!-- Section: Block Content -->
+
+    </div>
+{% endblock %}
